@@ -81,6 +81,14 @@
 
                 <div class="bg-gray-900 p-8 rounded-lg shadow-lg mb-8">
                     <h2 class="text-2xl font-bold text-white mb-6">Danh sách dự án</h2>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <button class="admin-filter-btn active bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="all">Tất cả</button>
+                        <button class="admin-filter-btn bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="ui">Lập trình UI</button>
+                        <button class="admin-filter-btn bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="design">Thiết kế</button>
+                        <button class="admin-filter-btn bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="photo">Nhiếp ảnh</button>
+                        <button class="admin-filter-btn bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="video">Video</button>
+                    </div>
                     <div id="admin-project-list" class="space-y-4">
                          <p class="text-gray-400">Đang tải danh sách...</p>
                     </div>
@@ -217,16 +225,29 @@
                 projectUrlInput.placeholder = 'https://example.com/image.jpg';
             }
         }
+
+        let currentAdminFilter = 'all';
+        
         function renderAdminProjectList(projects) {
-             allProjectsList = projects; // Lưu vào biến cục bộ
+             allProjectsList = projects; // Lưu vào biến cục bộ (từ chức năng sửa trước đó)
              adminProjectList.innerHTML = '';
+             
              if (projects.length === 0) {
                  adminProjectList.innerHTML = `<p class="text-gray-400">Chưa có dự án nào.</p>`;
                  return;
              }
+             
              projects.forEach(project => {
                  const item = document.createElement('div');
-                 item.className = 'bg-gray-700 p-4 rounded-lg flex items-center justify-between';
+                 // Thêm class 'admin-project-item' và thuộc tính data-category để làm mốc lọc
+                 item.className = 'admin-project-item bg-gray-700 p-4 rounded-lg flex items-center justify-between transition-all duration-300';
+                 item.dataset.category = project.category;
+                 
+                 // Kiểm tra nếu không khớp với filter hiện tại thì ẩn đi
+                 if (currentAdminFilter !== 'all' && project.category !== currentAdminFilter) {
+                     item.style.display = 'none';
+                 }
+
                  item.innerHTML = `
                     <div>
                         <h3 class="font-bold text-white">${project.title}</h3>
@@ -240,6 +261,32 @@
                  adminProjectList.appendChild(item);
              });
         }
+
+        // Logic xử lý khi click vào các nút Filter
+        const adminFilterButtons = document.querySelectorAll('.admin-filter-btn');
+        adminFilterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // 1. Đổi màu nút active
+                adminFilterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-teal-500', 'text-white');
+                    btn.classList.add('bg-gray-700', 'text-gray-300');
+                });
+                button.classList.add('active', 'bg-teal-500', 'text-white');
+                button.classList.remove('bg-gray-700', 'text-gray-300');
+
+                // 2. Cập nhật biến trạng thái và lọc danh sách
+                currentAdminFilter = button.dataset.filter;
+                const items = document.querySelectorAll('.admin-project-item');
+                
+                items.forEach(item => {
+                    if (currentAdminFilter === 'all' || item.dataset.category === currentAdminFilter) {
+                        item.style.display = 'flex'; // Dùng flex vì class gốc có 'flex'
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
 
         // --- NEW AND IMPROVED: REVIEW MANAGEMENT ---
         function renderAdminReviewList(reviews) {
