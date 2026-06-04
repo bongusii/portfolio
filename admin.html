@@ -84,6 +84,52 @@
             </div>
         </div>
     </div>
+
+    <div id="edit-modal-overlay" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[51] opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div id="edit-modal-content" class="bg-gray-800 w-full max-w-2xl rounded-lg shadow-2xl relative transform scale-95 opacity-0 transition-transform duration-300 flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-gray-700">
+                <h3 class="text-xl font-bold text-white">Chỉnh sửa Dự án</h3>
+                <button id="close-edit-modal-btn" class="text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[80vh]">
+                <form id="edit-project-form">
+                    <input type="hidden" id="edit-project-id">
+                    <div class="mb-4">
+                        <label for="edit-project-title" class="block text-gray-300 text-sm font-bold mb-2">Tên dự án</label>
+                        <input type="text" id="edit-project-title" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-project-category" class="block text-gray-300 text-sm font-bold mb-2">Phân loại</label>
+                        <select id="edit-project-category" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                            <option value="ui">Lập trình UI</option>
+                            <option value="design">Thiết kế</option>
+                            <option value="photo">Nhiếp ảnh</option>
+                            <option value="video">Video</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-project-url" class="block text-gray-300 text-sm font-bold mb-2">URL Chính</label>
+                        <input type="url" id="edit-project-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-project-thumbnail-url" class="block text-gray-300 text-sm font-bold mb-2">URL Thumbnail (Tùy chọn)</label>
+                        <input type="url" id="edit-project-thumbnail-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-project-description" class="block text-gray-300 text-sm font-bold mb-2">Mô tả dự án</label>
+                        <textarea id="edit-project-description" rows="3" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
+                    <div class="mb-6">
+                        <label for="edit-project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ sử dụng</label>
+                        <input type="text" id="edit-project-tech" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Cập nhật dự án</button>
+                </form>
+            </div>
+        </div>
+    </div>
     
     <div id="toast" class="fixed bottom-5 right-5 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 opacity-0"><p id="toast-message"></p></div>
 
@@ -105,6 +151,24 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
         const adminReviewList = document.getElementById('admin-review-list');
+
+        let allProjectsList = []; // Mảng lưu tạm danh sách dự án để fill vào form sửa
+
+        // Edit Modal Elements
+        const editModalOverlay = document.getElementById('edit-modal-overlay');
+        const editModalContent = document.getElementById('edit-modal-content');
+        const closeEditModalBtn = document.getElementById('close-edit-modal-btn');
+        const editProjectForm = document.getElementById('edit-project-form');
+        
+        function openEditModal() {
+            editModalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            editModalContent.classList.remove('opacity-0', 'scale-95');
+        }
+        function closeEditModal() {
+            editModalOverlay.classList.add('opacity-0', 'pointer-events-none');
+            editModalContent.classList.add('opacity-0', 'scale-95');
+        }
+        closeEditModalBtn.addEventListener('click', closeEditModal);
 
         function showToast(message, isError = false) {
             toastMessage.textContent = message;
@@ -143,6 +207,7 @@
             }
         }
         function renderAdminProjectList(projects) {
+             allProjectsList = projects; // Lưu vào biến cục bộ
              adminProjectList.innerHTML = '';
              if (projects.length === 0) {
                  adminProjectList.innerHTML = `<p class="text-gray-400">Chưa có dự án nào.</p>`;
@@ -156,7 +221,10 @@
                         <h3 class="font-bold text-white">${project.title}</h3>
                         <p class="text-sm text-gray-400 uppercase">${project.category}</p>
                     </div>
-                    <button data-id="${project.id}" class="delete-project-btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-md transition duration-300">Xóa</button>
+                    <div class="flex space-x-2">
+                        <button data-id="${project.id}" class="edit-project-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-md transition duration-300">Sửa</button>
+                        <button data-id="${project.id}" class="delete-project-btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-md transition duration-300">Xóa</button>
+                    </div>
                  `;
                  adminProjectList.appendChild(item);
              });
@@ -242,6 +310,20 @@
                     }
                 }
             }
+            // Poject edit
+            else if (target.classList.contains('edit-project-btn')) {
+                const project = allProjectsList.find(p => p.id === id);
+                if (project) {
+                    document.getElementById('edit-project-id').value = project.id;
+                    document.getElementById('edit-project-title').value = project.title || '';
+                    document.getElementById('edit-project-category').value = project.category || 'ui';
+                    document.getElementById('edit-project-url').value = project.url || '';
+                    document.getElementById('edit-project-thumbnail-url').value = project.thumbnailUrl || '';
+                    document.getElementById('edit-project-description').value = project.description || '';
+                    document.getElementById('edit-project-tech').value = project.technologies || '';
+                    openEditModal();
+                }
+            }
             // Review approve
             else if (target.classList.contains('approve-review-btn')) {
                 try {
@@ -275,6 +357,27 @@
         
         projectCategorySelect.addEventListener('change', updateUrlField);
         logoutButton.addEventListener('click', () => signOut(auth));
+        editProjectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-project-id').value;
+            const title = document.getElementById('edit-project-title').value;
+            const category = document.getElementById('edit-project-category').value;
+            const url = document.getElementById('edit-project-url').value;
+            const thumbnailUrl = document.getElementById('edit-project-thumbnail-url').value;
+            const description = document.getElementById('edit-project-description').value;
+            const technologies = document.getElementById('edit-project-tech').value;
+            
+            try {
+                await updateDoc(doc(db, "projects", id), { 
+                    title, category, url, thumbnailUrl, description, technologies 
+                });
+                showToast('Cập nhật dự án thành công!');
+                closeEditModal();
+            } catch (error) {
+                console.error("Lỗi cập nhật dự án: ", error);
+                showToast('Lỗi: không thể cập nhật dự án.', true);
+            }
+        });
         updateUrlField();
     </script>
 </body>
