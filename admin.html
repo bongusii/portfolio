@@ -100,6 +100,26 @@
                          <p class="text-gray-400">Đang tải danh sách đánh giá...</p>
                     </div>
                 </div>
+
+                <div class="bg-gray-900 p-8 rounded-lg shadow-lg mb-8 mt-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">Nhật ký Truy cập (Gần đây)</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-400">
+                            <thead class="text-xs text-gray-300 uppercase bg-gray-700">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 rounded-tl-lg">Thời gian</th>
+                                    <th scope="col" class="px-4 py-3">Địa chỉ IP</th>
+                                    <th scope="col" class="px-4 py-3">Thiết bị</th>
+                                    <th scope="col" class="px-4 py-3 rounded-tr-lg">Nguồn (Referrer)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-visit-logs" class="divide-y divide-gray-700">
+                                <tr><td colspan="4" class="px-4 py-4 text-center">Đang tải dữ liệu...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -156,7 +176,7 @@
         // CHANGED: Added 'updateDoc' to import list
         import { db, auth, projectsCollectionRef, reviewsCollectionRef } from './firebase-config.js';
         import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { onSnapshot, addDoc, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { onSnapshot, addDoc, deleteDoc, doc, query, orderBy, updateDoc, collection, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // UI Elements
         const addProjectForm = document.getElementById('add-project-form');
@@ -378,6 +398,47 @@
         onSnapshot(reviewsQuery, (snapshot) => {
             const reviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderAdminReviewList(reviews);
+        });
+
+        // Ghi nhan nguoi dung truy cap
+        const reviewsQuery = query(reviewsCollectionRef, orderBy('timestamp', 'desc'));
+        
+        // --- NEW CODE: LẤY NHẬT KÝ TRUY CẬP ---
+        const adminVisitLogsTable = document.getElementById('admin-visit-logs');
+        const visitLogsRef = collection(db, "visit_logs");
+        // Chỉ lấy 50 lượt truy cập gần nhất để tránh lag trang admin
+        const logsQuery = query(visitLogsRef, orderBy('timestamp', 'desc'), limit(50));
+
+        onSnapshot(logsQuery, (snapshot) => {
+            adminVisitLogsTable.innerHTML = '';
+            if (snapshot.empty) {
+                adminVisitLogsTable.innerHTML = `<tr><td colspan="4" class="px-4 py-4 text-center">Chưa có dữ liệu truy cập.</td></tr>`;
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                // Định dạng thời gian
+                const date = data.timestamp ? data.timestamp.toDate().toLocaleString('vi-VN') : 'Đang xử lý...';
+                
+                // Rút gọn nguồn truy cập nếu quá dài
+                let referrer = data.referrer;
+                if (referrer.length > 40) referrer = referrer.substring(0, 40) + '...';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-800 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-4 py-3 whitespace-nowrap text-gray-300">${date}</td>
+                    <td class="px-4 py-3 font-mono text-teal-400">${data.ip || 'N/A'}</td>
+                    <td class="px-4 py-3">
+                        <span class="${data.device === 'Máy tính' ? 'bg-blue-900 text-blue-300' : 'bg-green-900 text-green-300'} text-xs font-medium px-2.5 py-0.5 rounded">
+                            ${data.device || 'N/A'}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 truncate max-w-xs text-gray-400" title="${data.referrer}">${referrer}</td>
+                `;
+                adminVisitLogsTable.appendChild(tr);
+            });
         });
 
         // CHANGED: Event listener now handles all actions in the admin panel
