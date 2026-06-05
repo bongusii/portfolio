@@ -392,9 +392,13 @@
             const projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderAdminProjectList(projects);
         });
-        
-        // CHANGED: Now fetches all reviews, sorted by timestamp
+
         const reviewsQuery = query(reviewsCollectionRef, orderBy('timestamp', 'desc'));
+        onSnapshot(reviewsQuery, (snapshot) => {
+            const reviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderAdminReviewList(reviews);
+        });
+
         // --- NEW CODE: LẤY NHẬT KÝ TRUY CẬP ---
         const adminVisitLogsTable = document.getElementById('admin-visit-logs');
         const visitLogsRef = collection(db, "visit_logs");
