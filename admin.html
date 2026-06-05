@@ -395,14 +395,6 @@
         
         // CHANGED: Now fetches all reviews, sorted by timestamp
         const reviewsQuery = query(reviewsCollectionRef, orderBy('timestamp', 'desc'));
-        onSnapshot(reviewsQuery, (snapshot) => {
-            const reviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            renderAdminReviewList(reviews);
-        });
-
-        // Ghi nhan nguoi dung truy cap
-        const reviewsQuery = query(reviewsCollectionRef, orderBy('timestamp', 'desc'));
-        
         // --- NEW CODE: LẤY NHẬT KÝ TRUY CẬP ---
         const adminVisitLogsTable = document.getElementById('admin-visit-logs');
         const visitLogsRef = collection(db, "visit_logs");
@@ -440,6 +432,7 @@
                 adminVisitLogsTable.appendChild(tr);
             });
         });
+        
 
         // CHANGED: Event listener now handles all actions in the admin panel
         adminPanel.addEventListener('click', async (e) => {
