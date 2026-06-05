@@ -398,7 +398,7 @@
 
     <script type="module">
         import { db, projectsCollectionRef, reviewsCollectionRef } from './firebase-config.js';
-        import { onSnapshot, doc, getDoc, updateDoc, increment, addDoc, serverTimestamp, query, orderBy, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { onSnapshot, doc, getDoc, updateDoc, increment, addDoc, serverTimestamp, query, orderBy, where, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- ALL ELEMENT REFERENCES ---
         const portfolioGrid = document.getElementById('portfolio-grid');
@@ -424,18 +424,56 @@
         const visitorCounterPopup = document.getElementById('visitor-counter');
         const visitCountSpan = document.getElementById('visit-count');
         const counterRef = doc(db, "counters", "visits");
+        const visitLogsRef = collection(db, "visit_logs");
+        
         async function updateVisitorCount() {
             try {
                 const hasVisited = sessionStorage.getItem('hasVisitedPortfolio');
+                
                 if (!hasVisited) {
+                    // 1. Tăng biến đếm tổng
                     await updateDoc(counterRef, { count: increment(1) });
                     sessionStorage.setItem('hasVisitedPortfolio', 'true');
+
+                    // 2. Thu thập dữ liệu chi tiết
+                    let userIp = "Không xác định";
+                    try {
+                        // Gọi API miễn phí để lấy IP
+                        const ipResponse = await fetch('https://api.ipify.org?format=json');
+                        const ipData = await ipResponse.json();
+                        // Che đi phần cuối của IP (Ví dụ: 192.168.1.50 -> 192.168.1.***)
+                        const ipParts = ipData.ip.split('.');
+                        if(ipParts.length === 4) {
+                            userIp = `${ipParts[0]}.${ipParts[1]}.${ipParts[2]}.***`;
+                        } else {
+                            userIp = ipData.ip; // Dự phòng cho IPv6
+                        }
+                    } catch (e) {
+                        console.log("Không thể lấy IP");
+                    }
+
+                    // Phân tích sơ bộ thiết bị từ UserAgent
+                    const ua = navigator.userAgent;
+                    let deviceType = "Máy tính";
+                    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+                        deviceType = "Điện thoại/Tablet";
+                    }
+
+                    // 3. Lưu vào Firestore
+                    await addDoc(visitLogsRef, {
+                        timestamp: serverTimestamp(),
+                        ip: userIp,
+                        device: deviceType,
+                        browser: navigator.userAgent,
+                        referrer: document.referrer || "Truy cập trực tiếp",
+                    });
                 }
+
+                // Lấy và hiển thị tổng số lượt truy cập (Giữ nguyên như cũ)
                 const docSnap = await getDoc(counterRef);
                 if (docSnap.exists()) {
                     visitCountSpan.textContent = docSnap.data().count.toLocaleString('vi-VN');
                 } else {
-                    console.error("Counter document ('counters/visits') does not exist!");
                     visitCountSpan.textContent = "N/A";
                 }
                 setTimeout(() => { visitorCounterPopup.classList.add('show'); }, 500);
