@@ -182,6 +182,12 @@
         .rich-text-content img { border-radius: 0.75rem; margin: 2rem auto; max-width: 100%; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
         .rich-text-content strong { color: #ffffff; font-weight: 600; }
         .rich-text-content blockquote { border-left: 4px solid #2dd4bf; padding-left: 1rem; font-style: italic; color: #9ca3af; margin-bottom: 1.5rem; }
+
+        /* Thanh cuộn mảnh cho Modal */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7280; }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-200 antialiased">
@@ -478,40 +484,46 @@
             </div>
         </div>
     </div>
-    <div id="project-detail-modal-overlay" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[51] opacity-0 pointer-events-none p-2 sm:p-6 transition-opacity duration-300">
-        <div id="project-detail-modal-content" class="bg-gray-900 w-full max-w-7xl h-[95vh] rounded-xl shadow-2xl relative transform scale-95 opacity-0 transition-transform duration-300 flex flex-col overflow-hidden border border-gray-700">
+    <div id="project-detail-modal-overlay" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-[51] opacity-0 pointer-events-none p-0 sm:p-4 md:p-6 transition-opacity duration-300">
+        
+        <div id="project-detail-modal-content" class="bg-gray-900 w-full h-full sm:h-[95vh] max-w-7xl sm:rounded-xl shadow-2xl relative transform scale-95 opacity-0 transition-transform duration-300 flex flex-col overflow-hidden border-0 sm:border border-gray-700">
             
-            <button id="close-project-detail-modal-button" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-white bg-gray-800/80 hover:bg-gray-700 hover:text-teal-400 backdrop-blur-sm rounded-full p-2.5 z-50 transition-all shadow-lg border border-gray-600">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <button id="close-project-detail-modal-button" class="absolute top-3 right-3 sm:top-5 sm:right-5 text-white bg-gray-800/80 hover:bg-gray-700 hover:text-teal-400 backdrop-blur-sm rounded-full p-2 z-50 transition-all shadow-lg border border-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
 
-            <div class="flex-grow flex flex-col lg:flex-row overflow-hidden">
+            <div class="flex-grow flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden relative">
                 
-                <div class="w-full lg:w-1/3 bg-gray-800 border-r border-gray-700 p-6 sm:p-10 flex flex-col overflow-y-auto lg:overflow-visible relative z-10 shadow-xl">
-                    <img id="project-detail-image" src="" alt="Project Image" class="w-full h-auto rounded-lg shadow-lg mb-8 object-cover aspect-video border border-gray-700" loading="lazy">
+                <div class="w-full lg:w-1/3 bg-gray-800 border-b lg:border-b-0 lg:border-r border-gray-700 flex flex-col lg:h-full lg:overflow-y-auto z-10 custom-scrollbar">
                     
-                    <h3 id="project-detail-title" class="text-3xl sm:text-4xl font-bold text-white mb-2 leading-tight"></h3>
-                    <p id="project-detail-role" class="text-teal-400 font-semibold text-lg mb-8 tracking-wide"></p>
-                    
-                    <div class="mb-8">
-                        <h4 class="text-sm uppercase tracking-widest text-gray-500 mb-4 font-bold">Công cụ & Kỹ thuật</h4>
-                        <div id="project-detail-tech" class="flex flex-wrap gap-2"></div>
+                    <div class="w-full aspect-video lg:aspect-auto lg:h-64 flex-shrink-0 bg-gray-900">
+                        <img id="project-detail-image" src="" alt="Project Image" class="w-full h-full object-cover" loading="lazy">
                     </div>
+                    
+                    <div class="p-5 sm:p-8 flex flex-col flex-grow">
+                        <h3 id="project-detail-title" class="text-2xl sm:text-3xl font-bold text-white mb-2 leading-tight pr-8"></h3>
+                        <p id="project-detail-role" class="text-teal-400 font-semibold text-base mb-6 tracking-wide"></p>
+                        
+                        <div class="mb-8">
+                            <h4 class="text-xs uppercase tracking-widest text-gray-500 mb-3 font-bold">Công cụ & Kỹ thuật</h4>
+                            <div id="project-detail-tech" class="flex flex-wrap gap-2"></div>
+                        </div>
 
-                    <div class="mt-auto flex flex-col space-y-3">
-                        <a id="project-detail-live-btn" href="#" target="_blank" class="hidden w-full text-center bg-teal-500 hover:bg-teal-600 text-white font-bold py-3.5 px-4 rounded-lg transition duration-300 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.2)] hover:shadow-[0_0_20px_rgba(45,212,191,0.4)]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            Trải nghiệm thực tế
-                        </a>
-                        <a id="project-detail-source-btn" href="#" target="_blank" class="hidden w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3.5 px-4 rounded-lg transition duration-300 flex items-center justify-center gap-2 border border-gray-600">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                            Xem mã nguồn
-                        </a>
+                        <div class="mt-auto pt-6 flex flex-col space-y-3">
+                            <a id="project-detail-live-btn" href="#" target="_blank" class="hidden w-full text-center bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 items-center justify-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.2)]">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                Trải nghiệm thực tế
+                            </a>
+                            <a id="project-detail-source-btn" href="#" target="_blank" class="hidden w-full text-center bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 items-center justify-center gap-2 border border-gray-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                Xem mã nguồn
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="w-full lg:w-2/3 p-6 sm:p-10 lg:p-16 overflow-y-auto scroll-smooth">
-                    <div id="project-detail-description" class="rich-text-content max-w-3xl mx-auto">
+                <div class="w-full lg:w-2/3 p-5 sm:p-8 lg:p-14 lg:h-full lg:overflow-y-auto scroll-smooth custom-scrollbar">
+                    <div id="project-detail-description" class="rich-text-content max-w-3xl mx-auto pb-10">
                         </div>
                 </div>
             </div>
@@ -985,7 +997,7 @@
             projectDetailModalOverlay.classList.remove('opacity-0', 'pointer-events-none');
             projectDetailModalContent.classList.remove('opacity-0', 'scale-95');
         }
-        
+
         function closeProjectDetailModal() {
             projectDetailModalOverlay.classList.add('opacity-0', 'pointer-events-none');
             projectDetailModalContent.classList.add('opacity-0', 'scale-95');
