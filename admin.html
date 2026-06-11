@@ -8,7 +8,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <style>
+        /* Tùy chỉnh giao diện Editor cho phù hợp với Admin Dark Mode */
+        .ql-toolbar.ql-snow { background-color: #f3f4f6; border-radius: 0.5rem 0.5rem 0 0; border: none; }
+        .ql-container.ql-snow { background-color: #ffffff; color: #111827; border-radius: 0 0 0.5rem 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem; border: none; }
+        .ql-editor { min-height: 250px; }
+        .ql-editor p { margin-bottom: 0.75em; }
+
+        /* Các tùy chỉnh khác để phù hợp với giao diện admin */
         body { font-family: 'Quicksand', sans-serif; }
     </style>
 </head>
@@ -50,30 +59,48 @@
                             <label for="project-title" class="block text-gray-300 text-sm font-bold mb-2">Tên dự án</label>
                             <input type="text" id="project-title" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500" required>
                         </div>
-                        <div class="mb-4">
-                            <label for="project-category" class="block text-gray-300 text-sm font-bold mb-2">Phân loại</label>
-                            <select id="project-category" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500" required>
-                                <option value="ui">Lập trình UI</option>
-                                <option value="design">Thiết kế</option>
-                                <option value="photo">Nhiếp ảnh</option>
-                                <option value="video">Video</option>
-                            </select>
+                        <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="project-category" class="block text-gray-300 text-sm font-bold mb-2">Phân loại</label>
+                                <select id="project-category" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500" required>
+                                    <option value="ui">Lập trình UI</option>
+                                    <option value="design">Thiết kế</option>
+                                    <option value="photo">Nhiếp ảnh</option>
+                                    <option value="video">Video</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="project-role" class="block text-gray-300 text-sm font-bold mb-2">Vai trò của bạn</label>
+                                <input type="text" id="project-role" placeholder="VD: UI Developer, Colorist..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                            </div>
+                        </div>
+                        <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="project-url" id="url-label" class="block text-gray-300 text-sm font-bold mb-2">URL Chính (Ảnh/Video)</label>
+                                <input type="url" id="project-url" placeholder="https://..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500" required>
+                            </div>
+                            <div>
+                                <label for="project-thumbnail-url" class="block text-gray-300 text-sm font-bold mb-2">URL Thumbnail (Tùy chọn)</label>
+                                <input type="url" id="project-thumbnail-url" placeholder="Để trống nếu lấy URL chính" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                            </div>
+                        </div>
+                        <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="project-live-url" class="block text-gray-300 text-sm font-bold mb-2">Link Website Thực tế (Tùy chọn)</label>
+                                <input type="url" id="project-live-url" placeholder="https://..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                            </div>
+                            <div>
+                                <label for="project-source-url" class="block text-gray-300 text-sm font-bold mb-2">Link Source Code (Tùy chọn)</label>
+                                <input type="url" id="project-source-url" placeholder="https://github.com/..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                            </div>
                         </div>
                         <div class="mb-4">
-                            <label for="project-url" id="url-label" class="block text-gray-300 text-sm font-bold mb-2">URL Chính (Ảnh hoặc Video)</label>
-                            <input type="url" id="project-url" placeholder="https://example.com/image.jpg" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="project-thumbnail-url" class="block text-gray-300 text-sm font-bold mb-2">URL Thumbnail (Tùy chọn)</label>
-                            <input type="url" id="project-thumbnail-url" placeholder="Để trống nếu muốn tự động tạo/dùng URL chính" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
-                        </div>
-                        <div class="mb-4">
-                            <label for="project-description" class="block text-gray-300 text-sm font-bold mb-2">Mô tả dự án</label>
-                            <textarea id="project-description" rows="4" placeholder="Mô tả ngắn về dự án, vai trò của bạn, mục tiêu..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500"></textarea>
+                            <label for="project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ sử dụng (cách nhau bởi dấu phẩy)</label>
+                            <input type="text" id="project-tech" placeholder="VD: HTML, Laravel, Photoshop" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
                         </div>
                         <div class="mb-6">
-                            <label for="project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ sử dụng (cách nhau bởi dấu phẩy)</label>
-                            <input type="text" id="project-tech" placeholder="VD: HTML, CSS, Photoshop, Illustrator" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                            <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study</label>
+                            <div id="add-quill-editor"></div>
                         </div>
                         <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Thêm dự án</button>
                     </form>
@@ -135,34 +162,54 @@
             <div class="p-6 overflow-y-auto max-h-[80vh]">
                 <form id="edit-project-form">
                     <input type="hidden" id="edit-project-id">
-                    <div class="mb-4">
-                        <label for="edit-project-title" class="block text-gray-300 text-sm font-bold mb-2">Tên dự án</label>
-                        <input type="text" id="edit-project-title" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-project-title" class="block text-gray-300 text-sm font-bold mb-2">Tên dự án</label>
+                            <input type="text" id="edit-project-title" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="edit-project-category" class="block text-gray-300 text-sm font-bold mb-2">Phân loại</label>
+                            <select id="edit-project-category" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                                <option value="ui">Lập trình UI</option>
+                                <option value="design">Thiết kế</option>
+                                <option value="photo">Nhiếp ảnh</option>
+                                <option value="video">Video</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="edit-project-category" class="block text-gray-300 text-sm font-bold mb-2">Phân loại</label>
-                        <select id="edit-project-category" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
-                            <option value="ui">Lập trình UI</option>
-                            <option value="design">Thiết kế</option>
-                            <option value="photo">Nhiếp ảnh</option>
-                            <option value="video">Video</option>
-                        </select>
+                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-project-url" class="block text-gray-300 text-sm font-bold mb-2">URL Chính</label>
+                            <input type="url" id="edit-project-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="edit-project-thumbnail-url" class="block text-gray-300 text-sm font-bold mb-2">URL Thumbnail</label>
+                            <input type="url" id="edit-project-thumbnail-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="edit-project-url" class="block text-gray-300 text-sm font-bold mb-2">URL Chính</label>
-                        <input type="url" id="edit-project-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500" required>
+                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-project-role" class="block text-gray-300 text-sm font-bold mb-2">Vai trò</label>
+                            <input type="text" id="edit-project-role" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="edit-project-live-url" class="block text-gray-300 text-sm font-bold mb-2">Link Website Thực tế</label>
+                            <input type="url" id="edit-project-live-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="edit-project-thumbnail-url" class="block text-gray-300 text-sm font-bold mb-2">URL Thumbnail (Tùy chọn)</label>
-                        <input type="url" id="edit-project-thumbnail-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
-                    </div>
-                    <div class="mb-4">
-                        <label for="edit-project-description" class="block text-gray-300 text-sm font-bold mb-2">Mô tả dự án</label>
-                        <textarea id="edit-project-description" rows="3" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"></textarea>
+                    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="edit-project-source-url" class="block text-gray-300 text-sm font-bold mb-2">Link Source Code</label>
+                            <input type="url" id="edit-project-source-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="edit-project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ</label>
+                            <input type="text" id="edit-project-tech" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                        </div>
                     </div>
                     <div class="mb-6">
-                        <label for="edit-project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ sử dụng</label>
-                        <input type="text" id="edit-project-tech" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
+                        <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study</label>
+                        <div id="edit-quill-editor"></div>
                     </div>
                     <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Cập nhật dự án</button>
                 </form>
@@ -209,6 +256,22 @@
         }
         closeEditModalBtn.addEventListener('click', closeEditModal);
 
+        // Khởi tạo Quill Editors
+        const quillOptions = {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image', 'video'],
+                    ['clean']
+                ]
+            }
+        };
+        const addQuill = new Quill('#add-quill-editor', quillOptions);
+        const editQuill = new Quill('#edit-quill-editor', quillOptions);
+
         function showToast(message, isError = false) {
             toastMessage.textContent = message;
             toast.classList.remove('opacity-0');
@@ -223,18 +286,26 @@
             const category = document.getElementById('project-category').value;
             const url = document.getElementById('project-url').value;
             const thumbnailUrl = document.getElementById('project-thumbnail-url').value;
-            const description = document.getElementById('project-description').value;
+            const role = document.getElementById('project-role').value;
+            const liveUrl = document.getElementById('project-live-url').value;
+            const sourceUrl = document.getElementById('project-source-url').value;
             const technologies = document.getElementById('project-tech').value;
+            // Lấy nội dung dạng HTML từ Quill
+            const description = addQuill.root.innerHTML; 
             
             try {
-                await addDoc(projectsCollectionRef, { title, category, url, thumbnailUrl, description, technologies });
+                await addDoc(projectsCollectionRef, { 
+                    title, category, url, thumbnailUrl, role, liveUrl, sourceUrl, technologies, description 
+                });
                 showToast('Thêm dự án thành công!');
                 addProjectForm.reset();
+                addQuill.root.innerHTML = ''; // Xóa trắng editor
             } catch (error) {
                 console.error("Lỗi thêm dự án: ", error);
                 showToast('Có lỗi xảy ra, không thể thêm dự án.', true);
             }
         });
+
         function updateUrlField() {
             const selectedCategory = projectCategorySelect.value;
             if (selectedCategory === 'video') {
@@ -464,8 +535,12 @@
                     document.getElementById('edit-project-category').value = project.category || 'ui';
                     document.getElementById('edit-project-url').value = project.url || '';
                     document.getElementById('edit-project-thumbnail-url').value = project.thumbnailUrl || '';
-                    document.getElementById('edit-project-description').value = project.description || '';
+                    document.getElementById('edit-project-role').value = project.role || '';
+                    document.getElementById('edit-project-live-url').value = project.liveUrl || '';
+                    document.getElementById('edit-project-source-url').value = project.sourceUrl || '';
                     document.getElementById('edit-project-tech').value = project.technologies || '';
+                    // Đưa nội dung HTML vào lại Quill
+                    editQuill.root.innerHTML = project.description || '';
                     openEditModal();
                 }
             }
@@ -500,8 +575,6 @@
             }
         });
         
-        projectCategorySelect.addEventListener('change', updateUrlField);
-        logoutButton.addEventListener('click', () => signOut(auth));
         editProjectForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('edit-project-id').value;
@@ -509,12 +582,15 @@
             const category = document.getElementById('edit-project-category').value;
             const url = document.getElementById('edit-project-url').value;
             const thumbnailUrl = document.getElementById('edit-project-thumbnail-url').value;
-            const description = document.getElementById('edit-project-description').value;
+            const role = document.getElementById('edit-project-role').value;
+            const liveUrl = document.getElementById('edit-project-live-url').value;
+            const sourceUrl = document.getElementById('edit-project-source-url').value;
             const technologies = document.getElementById('edit-project-tech').value;
+            const description = editQuill.root.innerHTML;
             
             try {
                 await updateDoc(doc(db, "projects", id), { 
-                    title, category, url, thumbnailUrl, description, technologies 
+                    title, category, url, thumbnailUrl, role, liveUrl, sourceUrl, technologies, description 
                 });
                 showToast('Cập nhật dự án thành công!');
                 closeEditModal();
