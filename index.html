@@ -598,6 +598,13 @@
         </div>
     </div>
 
+    <div id="fullscreen-image-modal-overlay" class="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-[60] opacity-0 pointer-events-none p-4 transition-opacity duration-300">
+        <button id="close-fullscreen-image-btn" class="absolute top-4 right-4 sm:top-6 sm:right-6 text-white bg-gray-800/80 hover:bg-gray-700 hover:text-teal-400 backdrop-blur-sm rounded-full p-2.5 z-[61] transition-all shadow-lg border border-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <img id="fullscreen-image-view" src="" alt="Zoomed Image" class="max-w-full max-h-full object-contain transform scale-95 transition-transform duration-300">
+    </div>
+
     <div id="visitor-counter" class="fixed bottom-5 left-5 bg-gray-800/80 backdrop-blur-sm text-white py-2 px-4 rounded-lg shadow-lg flex items-center space-x-2 z-40">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <p class="text-sm">Lượt truy cập: <span id="visit-count" class="font-bold">...</span></p>
@@ -631,7 +638,10 @@
         const projectDetailRole = document.getElementById('project-detail-role');
         const projectDetailLiveBtn = document.getElementById('project-detail-live-btn');
         const projectDetailSourceBtn = document.getElementById('project-detail-source-btn');
-        
+        const fullscreenImageModalOverlay = document.getElementById('fullscreen-image-modal-overlay');
+        const closeFullscreenImageBtn = document.getElementById('close-fullscreen-image-btn');
+        const fullscreenImageView = document.getElementById('fullscreen-image-view');
+
         // --- VISITOR COUNTER LOGIC ---
         const visitorCounterPopup = document.getElementById('visitor-counter');
         const visitCountSpan = document.getElementById('visit-count');
@@ -724,6 +734,23 @@
                 openReviewModalBtn.textContent = 'Cảm ơn, bạn đã gửi đánh giá!';
             }
         }
+
+        function openFullscreenImage(src) {
+            fullscreenImageView.src = src;
+            fullscreenImageModalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            fullscreenImageView.classList.remove('scale-95');
+        }
+
+        function closeFullscreenImage() {
+            fullscreenImageModalOverlay.classList.add('opacity-0', 'pointer-events-none');
+            fullscreenImageView.classList.add('scale-95');
+            setTimeout(() => { fullscreenImageView.src = ''; }, 300);
+        }
+
+        closeFullscreenImageBtn.addEventListener('click', closeFullscreenImage);
+        fullscreenImageModalOverlay.addEventListener('click', (e) => { 
+            if (e.target === fullscreenImageModalOverlay) closeFullscreenImage(); 
+        });
 
         // --- TYPEWRITER EFFECT CHO HERO SECTION ---
         const roles = ["UI Developer.", "Graphics Designer.", "Photographer.", "Videographer."];
@@ -1003,10 +1030,16 @@
             images.forEach(imgSrc => {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide flex items-center justify-center bg-gray-900';
-                slide.innerHTML = `<img src="${imgSrc}" alt="${project.title}" class="w-full h-full object-cover">`;
+                
+                // Thêm cursor-pointer để báo hiệu có thể click
+                slide.innerHTML = `<img src="${imgSrc}" alt="${project.title}" class="w-full h-full object-cover cursor-pointer hover:opacity-80 transition-opacity">`;
+                
+                // Gắn sự kiện click mở ảnh phóng to
+                const imgElement = slide.querySelector('img');
+                imgElement.addEventListener('click', () => openFullscreenImage(imgSrc));
+
                 sliderWrapper.appendChild(slide);
             });
-
             // Hủy slider cũ nếu có để không bị lỗi bộ nhớ
             if (window.projectDetailSwiper) {
                 window.projectDetailSwiper.destroy(true, true);
