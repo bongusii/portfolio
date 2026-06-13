@@ -4,29 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Portfolio</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
     <style>
+        body { font-family: 'Quicksand', sans-serif; }
+        
         /* Tùy chỉnh giao diện Editor cho phù hợp với Admin Dark Mode */
         .ql-toolbar.ql-snow { background-color: #f3f4f6; border-radius: 0.5rem 0.5rem 0 0; border: none; }
         .ql-container.ql-snow { background-color: #ffffff; color: #111827; border-radius: 0 0 0.5rem 0.5rem; font-family: 'Quicksand', sans-serif; font-size: 1rem; border: none; }
         .ql-editor { min-height: 250px; }
         .ql-editor p { margin-bottom: 0.75em; }
-
-        /* Các tùy chỉnh khác để phù hợp với giao diện admin */
-        body { font-family: 'Quicksand', sans-serif; }
+        
+        /* Thanh cuộn mảnh */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6b7280; }
     </style>
 </head>
 <body class="bg-gray-800">
 
     <div id="admin-page" class="min-h-screen p-4 sm:p-8">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-5xl mx-auto">
+            
             <div id="auth-container">
-                <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-md mx-auto">
+                <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-md mx-auto mt-20">
                     <h2 class="text-2xl font-bold text-center text-white mb-6">Đăng nhập Admin</h2>
                     <form id="login-form" class="space-y-4">
                         <div>
@@ -44,16 +53,16 @@
             </div>
 
             <div id="admin-panel" class="hidden">
-                 <div class="flex justify-between items-center mb-8">
+                 <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
                     <h1 class="text-3xl font-bold text-white">Trang quản trị</h1>
                     <div>
-                        <a href="index.html" target="_blank" class="text-teal-400 hover:text-teal-300 mr-4">Xem trang chính</a>
+                        <a href="index.html" target="_blank" class="text-teal-400 hover:text-teal-300 mr-4 font-semibold">Xem trang chính</a>
                         <button id="logout-button" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">Đăng xuất</button>
                     </div>
                 </div>
 
                 <div class="bg-gray-900 p-8 rounded-lg shadow-lg mb-8">
-                    <h2 class="text-2xl font-bold text-white mb-6">Thêm dự án mới</h2>
+                    <h2 class="text-2xl font-bold text-white mb-6">Thêm dự án mới (Case Study)</h2>
                     <form id="add-project-form">
                         <div class="mb-4">
                             <label for="project-title" class="block text-gray-300 text-sm font-bold mb-2">Tên dự án</label>
@@ -70,18 +79,18 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="project-role" class="block text-gray-300 text-sm font-bold mb-2">Vai trò của bạn</label>
-                                <input type="text" id="project-role" placeholder="VD: UI Developer, Colorist..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                                <label for="project-role" class="block text-gray-300 text-sm font-bold mb-2">Vai trò của bạn (Tùy chọn)</label>
+                                <input type="text" id="project-role" placeholder="VD: Lead UI Developer, Video Editor..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
                             </div>
                         </div>
                         <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label for="project-url" id="url-label" class="block text-gray-300 text-sm font-bold mb-2">URL Chính (Ảnh/Video)</label>
+                                <label for="project-url" id="url-label" class="block text-gray-300 text-sm font-bold mb-2">URL Ảnh bìa / Video Chính</label>
                                 <input type="url" id="project-url" placeholder="https://..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500" required>
                             </div>
                             <div>
                                 <label for="project-thumbnail-url" class="block text-gray-300 text-sm font-bold mb-2">URL Thumbnail (Tùy chọn)</label>
-                                <input type="url" id="project-thumbnail-url" placeholder="Để trống nếu lấy URL chính" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                                <input type="url" id="project-thumbnail-url" placeholder="Để trống nếu muốn tự động lấy URL chính" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
                             </div>
                         </div>
                         <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -95,11 +104,15 @@
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label for="project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ sử dụng (cách nhau bởi dấu phẩy)</label>
-                            <input type="text" id="project-tech" placeholder="VD: HTML, Laravel, Photoshop" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                            <label for="project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công cụ & Kỹ thuật (Cách nhau bởi dấu phẩy)</label>
+                            <input type="text" id="project-tech" placeholder="VD: HTML, Laravel, Premiere Pro" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500">
+                        </div>
+                        <div class="mb-4">
+                            <label for="project-gallery" class="block text-gray-300 text-sm font-bold mb-2">Thư viện ảnh Slider (Cách nhau bởi dấu phẩy, Tùy chọn)</label>
+                            <textarea id="project-gallery" rows="2" placeholder="https://link1.jpg, https://link2.png" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500"></textarea>
                         </div>
                         <div class="mb-6">
-                            <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study</label>
+                            <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study chi tiết</label>
                             <div id="add-quill-editor"></div>
                         </div>
                         <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Thêm dự án</button>
@@ -116,19 +129,20 @@
                         <button class="admin-filter-btn bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="photo">Nhiếp ảnh</button>
                         <button class="admin-filter-btn bg-gray-700 text-gray-300 hover:bg-gray-600 px-4 py-2 rounded-full text-sm font-medium transition-colors" data-filter="video">Video</button>
                     </div>
+
                     <div id="admin-project-list" class="space-y-4">
                          <p class="text-gray-400">Đang tải danh sách...</p>
                     </div>
                 </div>
 
-                <div class="bg-gray-900 p-8 rounded-lg shadow-lg">
+                <div class="bg-gray-900 p-8 rounded-lg shadow-lg mb-8">
                     <h2 class="text-2xl font-bold text-white mb-6">Quản lý Đánh giá</h2>
                     <div id="admin-review-list" class="space-y-4">
                          <p class="text-gray-400">Đang tải danh sách đánh giá...</p>
                     </div>
                 </div>
 
-                <div class="bg-gray-900 p-8 rounded-lg shadow-lg mb-8 mt-8">
+                <div class="bg-gray-900 p-8 rounded-lg shadow-lg mb-8">
                     <h2 class="text-2xl font-bold text-white mb-6">Nhật ký Truy cập (Gần đây)</h2>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm text-gray-400">
@@ -151,15 +165,15 @@
         </div>
     </div>
 
-    <div id="edit-modal-overlay" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-[51] opacity-0 pointer-events-none transition-opacity duration-300 p-4">
-        <div id="edit-modal-content" class="bg-gray-800 w-full max-w-2xl rounded-lg shadow-2xl relative transform scale-95 opacity-0 transition-transform duration-300 flex flex-col">
-            <div class="flex justify-between items-center p-4 border-b border-gray-700">
+    <div id="edit-modal-overlay" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[51] opacity-0 pointer-events-none p-4 transition-opacity duration-300">
+        <div id="edit-modal-content" class="bg-gray-800 w-full max-w-5xl h-[95vh] rounded-xl shadow-2xl relative transform scale-95 opacity-0 transition-transform duration-300 flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b border-gray-700 flex-shrink-0">
                 <h3 class="text-xl font-bold text-white">Chỉnh sửa Dự án</h3>
-                <button id="close-edit-modal-btn" class="text-gray-400 hover:text-white">
+                <button id="close-edit-modal-btn" class="text-gray-400 hover:text-white bg-gray-900 p-1.5 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <div class="p-6 overflow-y-auto max-h-[80vh]">
+            <div class="p-6 overflow-y-auto flex-grow custom-scrollbar">
                 <form id="edit-project-form">
                     <input type="hidden" id="edit-project-id">
                     <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -203,60 +217,62 @@
                             <input type="url" id="edit-project-source-url" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
                         </div>
                         <div>
-                            <label for="edit-project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công nghệ</label>
+                            <label for="edit-project-tech" class="block text-gray-300 text-sm font-bold mb-2">Công cụ & Kỹ thuật</label>
                             <input type="text" id="edit-project-tech" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500">
                         </div>
                     </div>
+                    <div class="mb-4">
+                        <label for="edit-project-gallery" class="block text-gray-300 text-sm font-bold mb-2">Thư viện ảnh Slider (Cách nhau bởi dấu phẩy)</label>
+                        <textarea id="edit-project-gallery" rows="2" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"></textarea>
+                    </div>
                     <div class="mb-6">
-                        <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study</label>
+                        <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study chi tiết</label>
                         <div id="edit-quill-editor"></div>
                     </div>
-                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Cập nhật dự án</button>
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Cập nhật thay đổi</button>
                 </form>
             </div>
         </div>
     </div>
     
-    <div id="toast" class="fixed bottom-5 right-5 bg-gray-800 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 opacity-0"><p id="toast-message"></p></div>
+    <div id="toast" class="fixed bottom-5 right-5 text-white py-3 px-6 rounded-lg shadow-2xl transition-opacity duration-300 opacity-0 z-[60] font-semibold flex items-center gap-2">
+        <p id="toast-message"></p>
+    </div>
 
     <script type="module">
-        // CHANGED: Added 'updateDoc' to import list
         import { db, auth, projectsCollectionRef, reviewsCollectionRef } from './firebase-config.js';
         import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { onSnapshot, addDoc, deleteDoc, doc, query, orderBy, updateDoc, collection, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // UI Elements
-        const addProjectForm = document.getElementById('add-project-form');
+        // --- TÌM CÁC ELEMENT ---
         const authContainer = document.getElementById('auth-container');
         const adminPanel = document.getElementById('admin-panel');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const loginBtn = document.getElementById('login-btn');
         const logoutButton = document.getElementById('logout-button');
+        
+        const addProjectForm = document.getElementById('add-project-form');
         const adminProjectList = document.getElementById('admin-project-list');
         const projectCategorySelect = document.getElementById('project-category');
         const urlLabel = document.getElementById('url-label');
         const projectUrlInput = document.getElementById('project-url');
+        
+        const adminReviewList = document.getElementById('admin-review-list');
+        const adminVisitLogsTable = document.getElementById('admin-visit-logs');
+        
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toast-message');
-        const adminReviewList = document.getElementById('admin-review-list');
 
-        let allProjectsList = []; // Mảng lưu tạm danh sách dự án để fill vào form sửa
-
-        // Edit Modal Elements
         const editModalOverlay = document.getElementById('edit-modal-overlay');
         const editModalContent = document.getElementById('edit-modal-content');
         const closeEditModalBtn = document.getElementById('close-edit-modal-btn');
         const editProjectForm = document.getElementById('edit-project-form');
-        
-        function openEditModal() {
-            editModalOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            editModalContent.classList.remove('opacity-0', 'scale-95');
-        }
-        function closeEditModal() {
-            editModalOverlay.classList.add('opacity-0', 'pointer-events-none');
-            editModalContent.classList.add('opacity-0', 'scale-95');
-        }
-        closeEditModalBtn.addEventListener('click', closeEditModal);
 
-        // Khởi tạo Quill Editors
+        let allProjectsList = []; 
+        let currentAdminFilter = 'all';
+
+        // --- KHỞI TẠO QUILL EDITOR ---
         const quillOptions = {
             theme: 'snow',
             modules: {
@@ -272,6 +288,7 @@
         const addQuill = new Quill('#add-quill-editor', quillOptions);
         const editQuill = new Quill('#edit-quill-editor', quillOptions);
 
+        // --- HÀM TIỆN ÍCH ---
         function showToast(message, isError = false) {
             toastMessage.textContent = message;
             toast.classList.remove('opacity-0');
@@ -279,32 +296,16 @@
             setTimeout(() => { toast.classList.add('opacity-0'); }, 3000);
         }
 
-        // --- PROJECT MANAGEMENT ---
-        addProjectForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('project-title').value;
-            const category = document.getElementById('project-category').value;
-            const url = document.getElementById('project-url').value;
-            const thumbnailUrl = document.getElementById('project-thumbnail-url').value;
-            const role = document.getElementById('project-role').value;
-            const liveUrl = document.getElementById('project-live-url').value;
-            const sourceUrl = document.getElementById('project-source-url').value;
-            const technologies = document.getElementById('project-tech').value;
-            // Lấy nội dung dạng HTML từ Quill
-            const description = addQuill.root.innerHTML; 
-            
-            try {
-                await addDoc(projectsCollectionRef, { 
-                    title, category, url, thumbnailUrl, role, liveUrl, sourceUrl, technologies, description 
-                });
-                showToast('Thêm dự án thành công!');
-                addProjectForm.reset();
-                addQuill.root.innerHTML = ''; // Xóa trắng editor
-            } catch (error) {
-                console.error("Lỗi thêm dự án: ", error);
-                showToast('Có lỗi xảy ra, không thể thêm dự án.', true);
-            }
-        });
+        function openEditModal() {
+            editModalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            editModalContent.classList.remove('opacity-0', 'scale-95');
+        }
+        
+        function closeEditModal() {
+            editModalOverlay.classList.add('opacity-0', 'pointer-events-none');
+            editModalContent.classList.add('opacity-0', 'scale-95');
+        }
+        closeEditModalBtn.addEventListener('click', closeEditModal);
 
         function updateUrlField() {
             const selectedCategory = projectCategorySelect.value;
@@ -316,124 +317,20 @@
                 projectUrlInput.placeholder = 'https://example.com/image.jpg';
             }
         }
+        projectCategorySelect.addEventListener('change', updateUrlField);
+        updateUrlField();
 
-        let currentAdminFilter = 'all';
-        
-        function renderAdminProjectList(projects) {
-             allProjectsList = projects; // Lưu vào biến cục bộ (từ chức năng sửa trước đó)
-             adminProjectList.innerHTML = '';
-             
-             if (projects.length === 0) {
-                 adminProjectList.innerHTML = `<p class="text-gray-400">Chưa có dự án nào.</p>`;
-                 return;
-             }
-             
-             projects.forEach(project => {
-                 const item = document.createElement('div');
-                 // Thêm class 'admin-project-item' và thuộc tính data-category để làm mốc lọc
-                 item.className = 'admin-project-item bg-gray-700 p-4 rounded-lg flex items-center justify-between transition-all duration-300';
-                 item.dataset.category = project.category;
-                 
-                 // Kiểm tra nếu không khớp với filter hiện tại thì ẩn đi
-                 if (currentAdminFilter !== 'all' && project.category !== currentAdminFilter) {
-                     item.style.display = 'none';
-                 }
-
-                 item.innerHTML = `
-                    <div>
-                        <h3 class="font-bold text-white">${project.title}</h3>
-                        <p class="text-sm text-gray-400 uppercase">${project.category}</p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button data-id="${project.id}" class="edit-project-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-md transition duration-300">Sửa</button>
-                        <button data-id="${project.id}" class="delete-project-btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-md transition duration-300">Xóa</button>
-                    </div>
-                 `;
-                 adminProjectList.appendChild(item);
-             });
-        }
-
-        // Logic xử lý khi click vào các nút Filter
-        const adminFilterButtons = document.querySelectorAll('.admin-filter-btn');
-        adminFilterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // 1. Đổi màu nút active
-                adminFilterButtons.forEach(btn => {
-                    btn.classList.remove('active', 'bg-teal-500', 'text-white');
-                    btn.classList.add('bg-gray-700', 'text-gray-300');
-                });
-                button.classList.add('active', 'bg-teal-500', 'text-white');
-                button.classList.remove('bg-gray-700', 'text-gray-300');
-
-                // 2. Cập nhật biến trạng thái và lọc danh sách
-                currentAdminFilter = button.dataset.filter;
-                const items = document.querySelectorAll('.admin-project-item');
-                
-                items.forEach(item => {
-                    if (currentAdminFilter === 'all' || item.dataset.category === currentAdminFilter) {
-                        item.style.display = 'flex'; // Dùng flex vì class gốc có 'flex'
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // --- NEW AND IMPROVED: REVIEW MANAGEMENT ---
-        function renderAdminReviewList(reviews) {
-            adminReviewList.innerHTML = '';
-            if (reviews.length === 0) {
-                adminReviewList.innerHTML = `<p class="text-gray-400">Chưa có đánh giá nào.</p>`;
-                return;
-            }
-            reviews.forEach(review => {
-                const item = document.createElement('div');
-                // NEW: Different style for pending reviews
-                const isPending = !review.approved;
-                item.className = `p-4 rounded-lg flex flex-col sm:flex-row items-start justify-between transition-colors ${isPending ? 'bg-yellow-900/50 border border-yellow-500' : 'bg-gray-700'}`;
-                
-                // NEW: Conditional buttons based on approval status
-                const actionButtons = isPending 
-                ? `<button data-id="${review.id}" class="approve-review-btn bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-md transition duration-300 w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2">Duyệt</button>`
-                : `<button data-id="${review.id}" class="hide-review-btn bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded-md transition duration-300 w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2">Ẩn</button>`;
-
-                item.innerHTML = `
-                    <div class="flex-1 mr-4 mb-4 sm:mb-0">
-                        <div class="flex items-center mb-1">
-                           <h3 class="font-bold text-white mr-2">${review.name}</h3>
-                           <span class="text-yellow-400 text-sm">(${review.rating} ★)</span>
-                           ${isPending ? '<span class="ml-3 text-xs font-semibold bg-yellow-500 text-black px-2 py-0.5 rounded-full">Đang chờ</span>' : ''}
-                        </div>
-                        <p class="text-sm text-gray-300">${review.comment}</p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row w-full sm:w-auto flex-shrink-0">
-                        ${actionButtons}
-                        <button data-id="${review.id}" class="delete-review-btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-md transition duration-300 w-full sm:w-auto">Xóa</button>
-                    </div>
-                `;
-                adminReviewList.appendChild(item);
-            });
-        }
-
-        // --- AUTHENTICATION AND LISTENERS ---
-        const loginForm = document.getElementById('login-form');
-        const loginError = document.getElementById('login-error');
-        const loginBtn = document.getElementById('login-btn');
-
-        // Lắng nghe trạng thái đăng nhập
+        // --- LOGIC AUTHENTICATION ---
         onAuthStateChanged(auth, user => {
             if (user) {
-                // Đã đăng nhập -> Hiện trang admin
                 authContainer.style.display = 'none';
                 adminPanel.classList.remove('hidden');
             } else {
-                // Chưa đăng nhập -> Hiện form đăng nhập
                 adminPanel.classList.add('hidden');
                 authContainer.style.display = 'block';
             }
         });
 
-        // Xử lý sự kiện submit form đăng nhập
         if (loginForm) {
             loginForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -446,7 +343,6 @@
 
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
-                    // Đăng nhập thành công, onAuthStateChanged sẽ tự động ẩn form và hiện admin panel
                     loginForm.reset();
                 } catch (error) {
                     console.error("Lỗi đăng nhập:", error);
@@ -458,22 +354,166 @@
                 }
             });
         }
+        logoutButton.addEventListener('click', () => signOut(auth));
 
+        // --- QUẢN LÝ DỰ ÁN ---
         onSnapshot(projectsCollectionRef, (snapshot) => {
             const projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderAdminProjectList(projects);
         });
 
+        function renderAdminProjectList(projects) {
+             allProjectsList = projects;
+             adminProjectList.innerHTML = '';
+             
+             if (projects.length === 0) {
+                 adminProjectList.innerHTML = `<p class="text-gray-400">Chưa có dự án nào.</p>`;
+                 return;
+             }
+             
+             projects.forEach(project => {
+                 const item = document.createElement('div');
+                 item.className = 'admin-project-item bg-gray-700 p-4 rounded-lg flex items-center justify-between transition-all duration-300 border-l-4 border-teal-500';
+                 item.dataset.category = project.category;
+                 
+                 if (currentAdminFilter !== 'all' && project.category !== currentAdminFilter) {
+                     item.style.display = 'none';
+                 }
+
+                 item.innerHTML = `
+                    <div>
+                        <h3 class="font-bold text-white text-lg">${project.title}</h3>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">${project.category}</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button data-id="${project.id}" class="edit-project-btn bg-blue-600 hover:bg-blue-500 text-white font-bold py-1.5 px-4 rounded-md transition duration-300">Sửa</button>
+                        <button data-id="${project.id}" class="delete-project-btn bg-red-600 hover:bg-red-500 text-white font-bold py-1.5 px-4 rounded-md transition duration-300">Xóa</button>
+                    </div>
+                 `;
+                 adminProjectList.appendChild(item);
+             });
+        }
+
+        const adminFilterButtons = document.querySelectorAll('.admin-filter-btn');
+        adminFilterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                adminFilterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-teal-500', 'text-white');
+                    btn.classList.add('bg-gray-700', 'text-gray-300');
+                });
+                button.classList.add('active', 'bg-teal-500', 'text-white');
+                button.classList.remove('bg-gray-700', 'text-gray-300');
+
+                currentAdminFilter = button.dataset.filter;
+                const items = document.querySelectorAll('.admin-project-item');
+                
+                items.forEach(item => {
+                    if (currentAdminFilter === 'all' || item.dataset.category === currentAdminFilter) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // XỬ LÝ THÊM DỰ ÁN MỚI
+        addProjectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('project-title').value;
+            const category = document.getElementById('project-category').value;
+            const url = document.getElementById('project-url').value;
+            const thumbnailUrl = document.getElementById('project-thumbnail-url').value;
+            const role = document.getElementById('project-role').value;
+            const liveUrl = document.getElementById('project-live-url').value;
+            const sourceUrl = document.getElementById('project-source-url').value;
+            const technologies = document.getElementById('project-tech').value;
+            const galleryUrls = document.getElementById('project-gallery').value; // Lấy dữ liệu thư viện ảnh
+            const description = addQuill.root.innerHTML; 
+            
+            try {
+                await addDoc(projectsCollectionRef, { 
+                    title, category, url, thumbnailUrl, role, liveUrl, sourceUrl, technologies, galleryUrls, description 
+                });
+                showToast('Thêm dự án thành công!');
+                addProjectForm.reset();
+                document.getElementById('project-gallery').value = ''; // Reset textarea
+                addQuill.root.innerHTML = '';
+            } catch (error) {
+                console.error("Lỗi thêm dự án: ", error);
+                showToast('Có lỗi xảy ra, không thể thêm dự án.', true);
+            }
+        });
+
+        // XỬ LÝ SỬA DỰ ÁN
+        editProjectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-project-id').value;
+            const title = document.getElementById('edit-project-title').value;
+            const category = document.getElementById('edit-project-category').value;
+            const url = document.getElementById('edit-project-url').value;
+            const thumbnailUrl = document.getElementById('edit-project-thumbnail-url').value;
+            const role = document.getElementById('edit-project-role').value;
+            const liveUrl = document.getElementById('edit-project-live-url').value;
+            const sourceUrl = document.getElementById('edit-project-source-url').value;
+            const technologies = document.getElementById('edit-project-tech').value;
+            const galleryUrls = document.getElementById('edit-project-gallery').value; // Lấy dữ liệu thư viện ảnh
+            const description = editQuill.root.innerHTML;
+            
+            try {
+                await updateDoc(doc(db, "projects", id), { 
+                    title, category, url, thumbnailUrl, role, liveUrl, sourceUrl, technologies, galleryUrls, description 
+                });
+                showToast('Cập nhật dự án thành công!');
+                closeEditModal();
+            } catch (error) {
+                console.error("Lỗi cập nhật dự án: ", error);
+                showToast('Lỗi: không thể cập nhật dự án.', true);
+            }
+        });
+
+        // --- QUẢN LÝ ĐÁNH GIÁ ---
         const reviewsQuery = query(reviewsCollectionRef, orderBy('timestamp', 'desc'));
         onSnapshot(reviewsQuery, (snapshot) => {
             const reviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderAdminReviewList(reviews);
         });
 
-        // --- NEW CODE: LẤY NHẬT KÝ TRUY CẬP ---
-        const adminVisitLogsTable = document.getElementById('admin-visit-logs');
+        function renderAdminReviewList(reviews) {
+            adminReviewList.innerHTML = '';
+            if (reviews.length === 0) {
+                adminReviewList.innerHTML = `<p class="text-gray-400">Chưa có đánh giá nào.</p>`;
+                return;
+            }
+            reviews.forEach(review => {
+                const item = document.createElement('div');
+                const isPending = !review.approved;
+                item.className = `p-4 rounded-lg flex flex-col sm:flex-row items-start justify-between transition-colors ${isPending ? 'bg-yellow-900/40 border border-yellow-600/50' : 'bg-gray-700'}`;
+                
+                const actionButtons = isPending 
+                ? `<button data-id="${review.id}" class="approve-review-btn bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 px-4 rounded-md transition duration-300 w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2">Duyệt hiển thị</button>`
+                : `<button data-id="${review.id}" class="hide-review-btn bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-1.5 px-4 rounded-md transition duration-300 w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2">Tạm ẩn</button>`;
+
+                item.innerHTML = `
+                    <div class="flex-1 mr-4 mb-4 sm:mb-0">
+                        <div class="flex items-center mb-1">
+                           <h3 class="font-bold text-white mr-2 text-lg">${review.name}</h3>
+                           <span class="text-yellow-400 text-sm">(${review.rating} ★)</span>
+                           ${isPending ? '<span class="ml-3 text-xs font-bold bg-yellow-500 text-gray-900 px-2 py-0.5 rounded">Đang chờ duyệt</span>' : ''}
+                        </div>
+                        <p class="text-sm text-gray-300 mt-2 italic">"${review.comment}"</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row w-full sm:w-auto flex-shrink-0">
+                        ${actionButtons}
+                        <button data-id="${review.id}" class="delete-review-btn bg-red-600 hover:bg-red-500 text-white font-bold py-1.5 px-4 rounded-md transition duration-300 w-full sm:w-auto">Xóa vĩnh viễn</button>
+                    </div>
+                `;
+                adminReviewList.appendChild(item);
+            });
+        }
+
+        // --- NHẬT KÝ TRUY CẬP (ANALYTICS) ---
         const visitLogsRef = collection(db, "visit_logs");
-        // Chỉ lấy 50 lượt truy cập gần nhất để tránh lag trang admin
         const logsQuery = query(visitLogsRef, orderBy('timestamp', 'desc'), limit(50));
 
         onSnapshot(logsQuery, (snapshot) => {
@@ -485,11 +525,8 @@
 
             snapshot.forEach(doc => {
                 const data = doc.data();
-                // Định dạng thời gian
                 const date = data.timestamp ? data.timestamp.toDate().toLocaleString('vi-VN') : 'Đang xử lý...';
-                
-                // Rút gọn nguồn truy cập nếu quá dài
-                let referrer = data.referrer;
+                let referrer = data.referrer || 'Trực tiếp';
                 if (referrer.length > 40) referrer = referrer.substring(0, 40) + '...';
 
                 const tr = document.createElement('tr');
@@ -498,35 +535,32 @@
                     <td class="px-4 py-3 whitespace-nowrap text-gray-300">${date}</td>
                     <td class="px-4 py-3 font-mono text-teal-400">${data.ip || 'N/A'}</td>
                     <td class="px-4 py-3">
-                        <span class="${data.device === 'Máy tính' ? 'bg-blue-900 text-blue-300' : 'bg-green-900 text-green-300'} text-xs font-medium px-2.5 py-0.5 rounded">
+                        <span class="${data.device === 'Máy tính' ? 'bg-blue-900/60 text-blue-300 border border-blue-700' : 'bg-green-900/60 text-green-300 border border-green-700'} text-xs font-semibold px-2.5 py-1 rounded-full">
                             ${data.device || 'N/A'}
                         </span>
                     </td>
-                    <td class="px-4 py-3 truncate max-w-xs text-gray-400" title="${data.referrer}">${referrer}</td>
+                    <td class="px-4 py-3 truncate max-w-xs text-gray-400" title="${data.referrer || ''}">${referrer}</td>
                 `;
                 adminVisitLogsTable.appendChild(tr);
             });
         });
-        
 
-        // CHANGED: Event listener now handles all actions in the admin panel
+        // --- LẮNG NGHE TẤT CẢ SỰ KIỆN CLICK TRONG PANEL QUẢN TRỊ ---
         adminPanel.addEventListener('click', async (e) => {
             const target = e.target;
             const id = target.dataset.id;
             if (!id) return;
 
-            // Project delete
             if (target.classList.contains('delete-project-btn')) {
-                if (confirm('Bạn có chắc chắn muốn xóa DỰ ÁN này?')) {
+                if (confirm('Bạn có chắc chắn muốn XÓA VĨNH VIỄN dự án này? Thao tác này không thể hoàn tác.')) {
                     try {
                         await deleteDoc(doc(db, "projects", id));
-                        showToast('Xóa dự án thành công!');
+                        showToast('Đã xóa dự án!');
                     } catch (error) {
                         showToast('Lỗi: không thể xóa dự án.', true);
                     }
                 }
             }
-            // Poject edit
             else if (target.classList.contains('edit-project-btn')) {
                 const project = allProjectsList.find(p => p.id === id);
                 if (project) {
@@ -539,35 +573,33 @@
                     document.getElementById('edit-project-live-url').value = project.liveUrl || '';
                     document.getElementById('edit-project-source-url').value = project.sourceUrl || '';
                     document.getElementById('edit-project-tech').value = project.technologies || '';
-                    // Đưa nội dung HTML vào lại Quill
+                    document.getElementById('edit-project-gallery').value = project.galleryUrls || ''; // Gán dữ liệu thư viện ảnh
+                    
                     editQuill.root.innerHTML = project.description || '';
                     openEditModal();
                 }
             }
-            // Review approve
             else if (target.classList.contains('approve-review-btn')) {
                 try {
                     await updateDoc(doc(db, "reviews", id), { approved: true });
-                    showToast('Đã duyệt đánh giá.');
+                    showToast('Đã duyệt cho phép hiển thị đánh giá.');
                 } catch (error) {
-                    showToast('Lỗi: không thể duyệt đánh giá.', true);
+                    showToast('Lỗi: không thể duyệt.', true);
                 }
             }
-            // Review hide
             else if (target.classList.contains('hide-review-btn')) {
                 try {
                     await updateDoc(doc(db, "reviews", id), { approved: false });
-                    showToast('Đã ẩn đánh giá.');
+                    showToast('Đã tạm ẩn đánh giá này khỏi trang chủ.');
                 } catch (error) {
-                    showToast('Lỗi: không thể ẩn đánh giá.', true);
+                    showToast('Lỗi: không thể ẩn.', true);
                 }
             }
-            // Review delete
             else if (target.classList.contains('delete-review-btn')) {
-                if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn ĐÁNH GIÁ này?')) {
+                if (confirm('Bạn có chắc chắn muốn xóa vĩnh viễn đánh giá này?')) {
                     try {
                         await deleteDoc(doc(db, "reviews", id));
-                        showToast('Xóa đánh giá thành công!');
+                        showToast('Đã xóa đánh giá thành công!');
                     } catch (error) {
                         showToast('Lỗi: không thể xóa đánh giá.', true);
                     }
@@ -575,31 +607,6 @@
             }
         });
         
-        editProjectForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('edit-project-id').value;
-            const title = document.getElementById('edit-project-title').value;
-            const category = document.getElementById('edit-project-category').value;
-            const url = document.getElementById('edit-project-url').value;
-            const thumbnailUrl = document.getElementById('edit-project-thumbnail-url').value;
-            const role = document.getElementById('edit-project-role').value;
-            const liveUrl = document.getElementById('edit-project-live-url').value;
-            const sourceUrl = document.getElementById('edit-project-source-url').value;
-            const technologies = document.getElementById('edit-project-tech').value;
-            const description = editQuill.root.innerHTML;
-            
-            try {
-                await updateDoc(doc(db, "projects", id), { 
-                    title, category, url, thumbnailUrl, role, liveUrl, sourceUrl, technologies, description 
-                });
-                showToast('Cập nhật dự án thành công!');
-                closeEditModal();
-            } catch (error) {
-                console.error("Lỗi cập nhật dự án: ", error);
-                showToast('Lỗi: không thể cập nhật dự án.', true);
-            }
-        });
-        updateUrlField();
     </script>
 </body>
 </html>
