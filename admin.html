@@ -111,7 +111,7 @@
                             <label for="project-gallery" class="block text-gray-300 text-sm font-bold mb-2">Thư viện ảnh Slider (Cách nhau bởi dấu phẩy, Tùy chọn)</label>
                             <textarea id="project-gallery" rows="2" placeholder="https://link1.jpg, https://link2.png" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-teal-500"></textarea>
                         </div>
-                        <div class="mb-6">
+                        <div id="add-quill-container" class="mb-6">
                             <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study chi tiết</label>
                             <div id="add-quill-editor"></div>
                         </div>
@@ -226,7 +226,7 @@
                         <textarea id="edit-project-gallery" rows="2" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-3 text-white focus:outline-none focus:border-blue-500"></textarea>
                     </div>
                     <div class="mb-6">
-                        <label class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study chi tiết</label>
+                        <label id="edit-quill-container" class="block text-gray-300 text-sm font-bold mb-2">Nội dung Case Study chi tiết</label>
                         <div id="edit-quill-editor"></div>
                     </div>
                     <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300">Cập nhật thay đổi</button>
@@ -319,6 +319,32 @@
         }
         projectCategorySelect.addEventListener('change', updateUrlField);
         updateUrlField();
+
+        // Logic Ẩn/Hiện khung Case Study theo Danh mục
+        const addQuillContainer = document.getElementById('add-quill-container');
+        const editProjectCategory = document.getElementById('edit-project-category');
+        const editQuillContainer = document.getElementById('edit-quill-container');
+
+        function toggleQuillContainer(categoryValue, containerElement) {
+            if (categoryValue === 'ui') {
+                containerElement.style.display = 'block';
+            } else {
+                containerElement.style.display = 'none';
+            }
+        }
+
+        // Lắng nghe thay đổi dropdown Form Thêm
+        projectCategorySelect.addEventListener('change', (e) => {
+            toggleQuillContainer(e.target.value, addQuillContainer);
+        });
+        
+        // Lắng nghe thay đổi dropdown Form Sửa
+        editProjectCategory.addEventListener('change', (e) => {
+            toggleQuillContainer(e.target.value, editQuillContainer);
+        });
+
+        // Thiết lập trạng thái mặc định khi load trang
+        toggleQuillContainer(projectCategorySelect.value, addQuillContainer);
 
         // --- LOGIC AUTHENTICATION ---
         onAuthStateChanged(auth, user => {
@@ -576,6 +602,9 @@
                     document.getElementById('edit-project-gallery').value = project.galleryUrls || ''; // Gán dữ liệu thư viện ảnh
                     
                     editQuill.root.innerHTML = project.description || '';
+
+                    toggleQuillContainer(project.category, editQuillContainer);
+                    
                     openEditModal();
                 }
             }
