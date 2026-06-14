@@ -1004,6 +1004,13 @@
             setTimeout(() => { pdfIframe.src = ''; }, 300);
         }
         function openProjectDetailModal(project) {
+
+            if (!project) return;
+            
+            // Xóa nội dung cũ để tránh chớp giật
+            projectDetailDescription.innerHTML = '';
+            projectDetailTitle.textContent = project.title;
+
             const leftCol = document.getElementById('modal-left-col');
             const rightCol = document.getElementById('modal-right-col');
             const sliderContainer = leftCol.querySelector('.aspect-video'); // Khung chứa ảnh
@@ -1019,12 +1026,6 @@
                 rightCol.style.display = "none";
                 sliderContainer.className = "w-full h-[60vh] md:h-[75vh] flex-shrink-0 bg-black relative"; // Phóng to ảnh
             }
-            
-            if (!project) return;
-            
-            // Xóa nội dung cũ để tránh chớp giật
-            projectDetailDescription.innerHTML = '';
-            projectDetailTitle.textContent = project.title;
 
             // --- XỬ LÝ HÌNH ẢNH (SLIDER) ---
             const sliderWrapper = document.getElementById('project-detail-slider-wrapper');
